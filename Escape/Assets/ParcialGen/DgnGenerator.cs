@@ -84,7 +84,9 @@ public class DgnGenerator : MonoBehaviour
         foreach (Transform item in transform) Destroy(item.gameObject);
 
         previousRoom = Instantiate(rooms[0].GetRoomType((int)RoomType.Start), transform).GetComponent<Room>();
+
         currentRoom = previousRoom;
+
         CreateRoomsRecursively();
     }
 
@@ -99,7 +101,9 @@ public class DgnGenerator : MonoBehaviour
             SnapRooms(CurrentRoom, previousRoom);
 
         }
-        if (i >= 5) return;
+
+        if (i >= 2) return;
+
         CreateRoomsRecursively();
     }
 
@@ -108,7 +112,10 @@ public class DgnGenerator : MonoBehaviour
         Transform snap1 = room1.GetRandomSnap();
         Transform snap2 = room2.GetRandomSnap();
 
-        room1.transform.eulerAngles = snap1.localEulerAngles;
-        room1.transform.position = snap1.TransformVector(snap2.position) - snap1.position;
+        room1.transform.eulerAngles = room2.transform.TransformDirection(snap2.eulerAngles) - snap1.localEulerAngles;
+
+        Vector3 distance = snap1.position - snap2.position;
+
+        room1.transform.position = room2.transform.position - distance;
     }
 }
