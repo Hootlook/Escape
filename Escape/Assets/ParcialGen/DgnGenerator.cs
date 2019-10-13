@@ -53,7 +53,6 @@ public class DgnGenerator : MonoBehaviour
     Room currentRoom;
     Room CurrentRoom
     {
-
         get
         {
             return currentRoom;
@@ -64,12 +63,7 @@ public class DgnGenerator : MonoBehaviour
             currentRoom = value;
         }
     }
-    int i = 0;
-
-    void Start()
-    {
-
-    }
+    int roomIteration = 0;
 
     void Update()
     {
@@ -92,17 +86,16 @@ public class DgnGenerator : MonoBehaviour
 
     private void CreateRoomsRecursively()
     {
-        i++;
+        roomIteration++;
 
-        for (int door = 0; door < previousRoom.snap.Length; door++)
+        foreach (var door in previousRoom.snap)
         {
             CurrentRoom = Instantiate(rooms[0].GetRoomType((int)RoomType.Connector), transform).GetComponent<Room>();
 
             SnapRooms(CurrentRoom, previousRoom);
-
         }
 
-        if (i >= 2) return;
+        if (roomIteration >= 20) return;
 
         CreateRoomsRecursively();
     }
@@ -112,10 +105,22 @@ public class DgnGenerator : MonoBehaviour
         Transform snap1 = room1.GetRandomSnap();
         Transform snap2 = room2.GetRandomSnap();
 
-        room1.transform.eulerAngles = room2.transform.TransformDirection(snap2.eulerAngles) - snap1.localEulerAngles;
+        room1.transform.position =  room2.transform.position;
 
-        Vector3 distance = snap1.position - snap2.position;
+        room1.transform.position = room2.transform.position - snap2.position;
 
-        room1.transform.position = room2.transform.position - distance;
+        room1.transform.position = room2.transform.position - snap1.position;
+
+        room1.transform.RotateAround(snap1.position, snap1.up, room2.transform.TransformDirection(snap1.localEulerAngles).y);
+
+        //room1.transform.RotateAround(snap1.position, snap1.up, room2.transform.TransformDirection(snap1.localEulerAngles).y);
+
+        int x;
+
+        Int32.TryParse(snap1.name, out x);
+
+        room1.snap.RemoveAt(x);
+
+        //Destroy(room1.transform.Find(snap1.name).gameObject);
     }
 }

@@ -4,10 +4,12 @@ using UnityEngine;
 
 public class Room : MonoBehaviour
 {
-    public Transform[] snap;
+    public List<Transform> snap;
 
     public Transform GetRandomSnap()
     {
-        return snap[Random.Range(0, snap.Length)];
+        int index = Random.Range(0, snap.Count);
+        snap[index].name = index.ToString();
+        return snap[index];
     }
 }
