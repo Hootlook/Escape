@@ -90,12 +90,12 @@ public class DgnGenerator : MonoBehaviour
 
         foreach (var door in previousRoom.snap)
         {
-            CurrentRoom = Instantiate(rooms[0].GetRoomType((int)RoomType.Connector), transform).GetComponent<Room>();
+            CurrentRoom = Instantiate(rooms[0].GetRoomType((int)RoomType.Common), transform).GetComponent<Room>();
 
             SnapRooms(CurrentRoom, previousRoom);
         }
 
-        if (roomIteration >= 20) return;
+        if (roomIteration >= 10) return;
 
         CreateRoomsRecursively();
     }
@@ -111,9 +111,7 @@ public class DgnGenerator : MonoBehaviour
 
         room1.transform.position = room2.transform.position - snap1.position;
 
-        room1.transform.RotateAround(snap1.position, snap1.up, room2.transform.TransformDirection(snap1.localEulerAngles).y);
-
-        //room1.transform.RotateAround(snap1.position, snap1.up, room2.transform.TransformDirection(snap1.localEulerAngles).y);
+        room1.transform.RotateAround(snap1.position, snap1.up, snap2.eulerAngles.y - 180 - snap1.eulerAngles.y);
 
         int x;
 
