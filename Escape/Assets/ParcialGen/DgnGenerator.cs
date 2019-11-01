@@ -90,7 +90,7 @@ public class DgnGenerator : MonoBehaviour
 
         foreach (var door in previousRoom.snap)
         {
-            CurrentRoom = Instantiate(rooms[0].GetRoomType((int)RoomType.Common), transform).GetComponent<Room>();
+            CurrentRoom = Instantiate(rooms[0].GetRoomType((int)RoomType.Connector), transform).GetComponent<Room>();
 
             SnapRooms(CurrentRoom, previousRoom);
         }
