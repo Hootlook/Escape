@@ -18,12 +18,12 @@ public class PlayerAnimation : MonoBehaviour
 
     void Update()
     {
-        if (pc.rolling == true)
+        if (pc.isRolling == true)
         {
             anim.SetBool("rolling", true);
         }
         else anim.SetBool("rolling", false);
-        if (pc.stepBack)
+        if (pc.isJumpingBack)
         {
             anim.SetBool("stepBack", true);
         }

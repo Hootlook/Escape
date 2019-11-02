@@ -14,7 +14,7 @@ public class CameraManager : MonoBehaviour {
     public float maxDistance = 4.0f;
     public float smooth = 10.0f;
     private float distance;
-    Vector3 dollyDir;
+    Vector3 normalizedDir;
 
     public static CameraManager instance;
 
@@ -33,7 +33,7 @@ public class CameraManager : MonoBehaviour {
 
     void Start ()
     {
-        dollyDir = Camera.main.transform.localPosition.normalized;
+        normalizedDir = Camera.main.transform.localPosition.normalized;
         distance = Camera.main.transform.localPosition.magnitude;
 
         Cursor.lockState = CursorLockMode.Locked;
@@ -47,11 +47,11 @@ public class CameraManager : MonoBehaviour {
 		horizontal -=  Input.GetAxis("RightAxis X") * rotationSpeedX;
 		vertical = Mathf.Clamp(vertical, -80, 80);
 
-        Vector3 desiredCameraPos = transform.TransformPoint(dollyDir * maxDistance);
+        Vector3 desiredCameraPos = transform.TransformPoint(normalizedDir * maxDistance);
 
         distance = Physics.Linecast(transform.position, desiredCameraPos, out RaycastHit hit) ? Mathf.Clamp((hit.distance * 0.87f), minDistance, minDistance) : maxDistance;
 
-        Camera.main.transform.localPosition = Vector3.Lerp(Camera.main.transform.localPosition, dollyDir * distance, Time.deltaTime * smooth);
+        Camera.main.transform.localPosition = Vector3.Lerp(Camera.main.transform.localPosition, normalizedDir * distance, Time.deltaTime * smooth);
     }
 
 	private void LateUpdate()
