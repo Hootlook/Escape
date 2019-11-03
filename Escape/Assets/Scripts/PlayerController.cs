@@ -39,15 +39,15 @@ public class PlayerController : MonoBehaviour
             transform.eulerAngles = Vector3.up * Mathf.SmoothDampAngle(transform.eulerAngles.y, targetRotation, ref turnSmoothVelocity, turnSmoothTime);
         }
 
-        if (Input.GetButton("Dash")) runTimer += Time.deltaTime;
+        if (Input.GetButton("B")) runTimer += Time.deltaTime;
 
         isRunning = runTimer > 0.5 ? isRunning = true : isRunning = false;
 
         if (isRolling || isJumpingBack) return;
 
-        if (Input.GetButtonUp("Dash"))
+        if (Input.GetButtonUp("B"))
         {
-            if (inputDir.x + inputDir.y != 0 && runTimer < 0.3) StartCoroutine(Roll());
+            if (inputDir.magnitude != 0 && runTimer < 0.3) StartCoroutine(Roll());
 
             if (inputDir.x == 0 && inputDir.y == 0 && runTimer < 0.3) StartCoroutine(StepBack());
 
@@ -66,7 +66,7 @@ public class PlayerController : MonoBehaviour
         currentSpeed = Mathf.SmoothDamp(currentSpeed, stateSpeed, ref currentSpeed, speedSmoothTime);
 
         velocityY += Time.deltaTime * gravity;
-        Vector3 velocity = transform.forward * currentSpeed + Vector3.up * velocityY;
+        Vector3 velocity = Vector3.up * velocityY;
 
         cc.Move(velocity * Time.deltaTime);
 

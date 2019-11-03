@@ -2279,7 +2279,7 @@ MonoBehaviour:
   runSpeed: 8
   gravity: -30
   turnSmoothTime: 0.05
-  speedSmoothTime: 0.07
+  speedSmoothTime: 0.05
   isRunning: 0
   isRolling: 0
   isJumpingBack: 0

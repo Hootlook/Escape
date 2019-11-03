@@ -171,7 +171,7 @@ PrefabInstance:
     - target: {fileID: 1524373482949478856, guid: a3096566f6697fe40b7942beae4e665a,
         type: 3}
       propertyPath: m_RootOrder
-      value: 2
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1524373482949478856, guid: a3096566f6697fe40b7942beae4e665a,
         type: 3}
@@ -193,6 +193,11 @@ PrefabInstance:
       propertyPath: player
       value: 
       objectReference: {fileID: 3433222254257188590}
+    - target: {fileID: 1524373482949478857, guid: a3096566f6697fe40b7942beae4e665a,
+        type: 3}
+      propertyPath: lockOnTarget
+      value: 
+      objectReference: {fileID: 6159623980722665780}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: a3096566f6697fe40b7942beae4e665a, type: 3}
 --- !u!1 &503886686
@@ -2240,7 +2245,7 @@ PrefabInstance:
     - target: {fileID: 6588280114717716856, guid: 96945258fe1d1c1489bdb8561cce0139,
         type: 3}
       propertyPath: m_RootOrder
-      value: 1
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 6588280114717716856, guid: 96945258fe1d1c1489bdb8561cce0139,
         type: 3}

@@ -28,6 +28,6 @@ public class PlayerAnimation : MonoBehaviour
             anim.SetBool("stepBack", true);
         }
         else anim.SetBool("stepBack", false);
-        anim.SetFloat("vertical", pc.currentSpeed, 0.4f, Time.deltaTime);
+        anim.SetFloat("vertical", pc.stateSpeed, 0.4f, Time.deltaTime);
     }
 }
