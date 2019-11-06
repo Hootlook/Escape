@@ -5,19 +5,27 @@ using UnityEngine;
 public class PlayerAnimation : MonoBehaviour
 {
     Animator anim;
-    CharacterController controller;
     PlayerController pc;
 
     void Start()
     {
         anim = GetComponentInChildren<Animator>();
-        controller = GetComponent<CharacterController>();
         pc = GetComponent<PlayerController>();
     }
 
 
     void Update()
     {
+        if (CameraManager.instance.isLocking && !pc.isRunning)
+        {
+            anim.SetBool("lockon", true);
+        }
+        else
+        {
+            anim.SetBool("lockon", false);
+        }
+
+
         if (pc.isRolling == true)
         {
             anim.SetBool("rolling", true);
@@ -28,6 +36,10 @@ public class PlayerAnimation : MonoBehaviour
             anim.SetBool("stepBack", true);
         }
         else anim.SetBool("stepBack", false);
-        anim.SetFloat("vertical", pc.stateSpeed, 0.4f, Time.deltaTime);
+
+        anim.SetFloat("vertical", pc.stateSpeed.y, 0.4f, Time.deltaTime);
+        anim.SetFloat("horizontal", pc.stateSpeed.x, 0.4f, Time.deltaTime);
+        anim.SetFloat("magnitude", pc.stateSpeed.magnitude, 0.2f, Time.deltaTime);
+
     }
 }

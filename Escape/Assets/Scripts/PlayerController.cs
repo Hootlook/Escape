@@ -3,8 +3,8 @@ using System.Collections;
 
 public class PlayerController : MonoBehaviour
 {
-    public float currentSpeed;
-    public float stateSpeed;
+    [HideInInspector]
+    public Vector2 stateSpeed;
     public float walkSpeed = 1.5f;
     public float jogSpeed = 5;
     public float runSpeed = 8;
@@ -33,15 +33,18 @@ public class PlayerController : MonoBehaviour
         input = new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"));
         inputDir = input.normalized;
 
-        if (inputDir != Vector2.zero)
+        if(CameraManager.instance.isLocking && !isRunning && !isRolling)
         {
-            float targetRotation = Mathf.Atan2(inputDir.x, inputDir.y) * Mathf.Rad2Deg + Camera.main.transform.eulerAngles.y;
-            transform.eulerAngles = Vector3.up * Mathf.SmoothDampAngle(transform.eulerAngles.y, targetRotation, ref turnSmoothVelocity, turnSmoothTime);
+            LockRotation(CameraManager.instance.lockOnTarget);
         }
-
+        else
+        {
+            FreeRotation(input);
+        }
+        
         if (Input.GetButton("B")) runTimer += Time.deltaTime;
 
-        isRunning = runTimer > 0.5 ? isRunning = true : isRunning = false;
+        isRunning = runTimer > 0.5 && inputDir.magnitude > 0 ? isRunning = true : isRunning = false;
 
         if (isRolling || isJumpingBack) return;
 
@@ -53,7 +56,7 @@ public class PlayerController : MonoBehaviour
 
             runTimer = 0;
         }
-        
+
         Move();
     }
 
@@ -61,18 +64,32 @@ public class PlayerController : MonoBehaviour
     {
         float walking = input.magnitude < 1 ? walkSpeed : jogSpeed;
 
-        stateSpeed = isRunning ? runSpeed : walking * inputDir.magnitude;
+        float speed = isRunning ? runSpeed : walking * inputDir.magnitude;
 
-        currentSpeed = Mathf.SmoothDamp(currentSpeed, stateSpeed, ref currentSpeed, speedSmoothTime);
+        stateSpeed = new Vector2(speed * input.normalized.x, speed * input.normalized.y);
 
         velocityY += Time.deltaTime * gravity;
-        Vector3 velocity = Vector3.up * velocityY;
 
-        cc.Move(velocity * Time.deltaTime);
+        Vector3 velocity = Vector3.up * velocityY + cc.velocity;
 
-        currentSpeed = new Vector2(cc.velocity.x, cc.velocity.z).magnitude;
+        if (!cc.isGrounded) cc.Move(velocity * Time.deltaTime);
+        else velocityY = 0;
+    }
 
-        if (cc.isGrounded) velocityY = 0;
+    void LockRotation(Transform target)
+    {
+        Vector3 direction = target.position - transform.position;
+        Vector3 flattenedDirection = Vector3.ProjectOnPlane(direction, Vector3.up);
+        transform.rotation = Quaternion.Lerp(transform.rotation, Quaternion.LookRotation(flattenedDirection), 10 * Time.deltaTime);
+    }
+
+    void FreeRotation(Vector2 input)
+    {
+        if (input.normalized != Vector2.zero)
+        {
+            float targetRotation = Mathf.Atan2(inputDir.x, inputDir.y) * Mathf.Rad2Deg + Camera.main.transform.eulerAngles.y;
+            transform.eulerAngles = Vector3.up * Mathf.SmoothDampAngle(transform.eulerAngles.y, targetRotation, ref turnSmoothVelocity, turnSmoothTime);
+        }
     }
 
     IEnumerator StepBack()

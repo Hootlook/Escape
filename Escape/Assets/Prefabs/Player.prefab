@@ -2272,12 +2272,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c6a3854f0dfe49447b9fa3731646db8b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  currentSpeed: 0
-  stateSpeed: 0
+  stateSpeed: {x: 0, y: 0}
   walkSpeed: 1.5
   jogSpeed: 5
   runSpeed: 8
-  gravity: -30
+  gravity: -2
   turnSmoothTime: 0.05
   speedSmoothTime: 0.05
   isRunning: 0
